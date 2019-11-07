@@ -14,19 +14,27 @@ class Index extends Component {
 
 
   onChange = e => {
-    let data = this.state.data;
-    data[[e.target.name]] = e.target.value;
-    this.setState({
-      data: data
-    });
+    let params = this.state.params;
+    params[[e.target.name]] = e.target.value;
+    this.setState({params});
   };
 
   handleClick = () => {
     this.props.getAllAuditLogs(this.state.params)
   };
 
-  pageChange= (e) => {
-
+  pageChange = (e) => {
+    let params = this.state.params;
+    if(e.target.name == 'prev' && params.page >1){
+      params.page =  parseInt(params.page)- 1;
+      this.setState({params})
+    this.props.getAllAuditLogs(params)
+    }
+    else if(e.target.name == 'next'){
+      params.page =  parseInt(params.page) + 1;
+            this.setState({ params})
+    this.props.getAllAuditLogs(params)
+    }
   }
 
   tableData = prop => {
@@ -88,6 +96,13 @@ class Index extends Component {
     return renData;
   };
 
+  submitSearch = ()=> {
+    let params = this.state.params;
+    params.page = 1;
+    this.props.getAllAuditLogs(params)
+
+  }
+
   componentDidMount() {
     this.props.getAllAuditLogs(this.state.params)
     this.props.getAllApplications()
@@ -96,7 +111,7 @@ class Index extends Component {
 
 
   render() {
-    console.log(this.props.allApplications, "page")
+    console.log(this.state.params, "page")
     return (
       <div className="side-container">
         <Sidebar />
@@ -111,9 +126,8 @@ class Index extends Component {
           Applications
           <label htmlFor="">
           <select
-            // onChange={handleChange}
-            // value={data.assignedUsers}
-            name="assignedUsers"
+             onChange={this.onChange}
+            name="appId"
             className="browser-default custom-select custom-select-md mb-3"
           >
           <option value="">none</option>
@@ -123,9 +137,8 @@ class Index extends Component {
           <div className="col-sm-3">Action types
           <label htmlFor="">
           <select
-            // onChange={handleChange}
-            // value={data.assignedUsers}
-            name="assignedUsers"
+            onChange={this.onChange}
+            name="actionTypeId"
             className="browser-default custom-select custom-select-md mb-3"
           >
           <option value="">none</option>
@@ -133,13 +146,27 @@ class Index extends Component {
           </select>
         </label>
           </div>
+          <div className="col-sm-3">
+          Search:
+          <input
+          onChange={this.onChange}
+          className="inputStyle2"
+          type="text"
+          name="searchText"
+          placeholder="search..."
+        />
+          </div>
+          <div className="col-sm-3">
+           
+          <button className="btn search-btn" onClick={this.submitSearch}>Search</button>
+          </div>
           </div>
         <div className="card-box">{this.tableData(this.props.allAuditLogs)}</div>
 
 
         <div className="docs-prevnext" >
-          {(this.state.params.page==1)? " " :<button className="docs-prev btn" name="prev" onClick={this.handleChange}>prev</button>}
-          {(this.props.allAuditLogs.length > 9)? <button className="docs-next btn" name="next" onClick={this.handleChange}>next</button>: ""}
+          {(this.state.params.page==1)? " " :<button className="docs-prev btn" name="prev" onClick={this.pageChange}>prev</button>}
+          {(this.props.allAuditLogs.length > 9)? <button className="docs-next btn" name="next" onClick={this.pageChange}>next</button>: ""}
 </div>
 
          </div>
