@@ -1,0 +1,8 @@
+export const LOGIN = 'LOGIN';
+export const IS_LOGIN = 'IS_LOGIN';
+export const GET_ALL_APPLICATIONS = "GET_ALL_APPLICATIONS";
+export const ADD_NEW_APPLICATION = "ADD_NEW_APPLICATION";
+export const ALL_AUDIT_LOGS = "ALL_AUDIT_LOGS";
+export const GET_ALL_ACTION_TYPES = "GET_ALL_ACTION_TYPES";
+
+

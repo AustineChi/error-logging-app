@@ -1,0 +1,8 @@
+version: "3.2"
+services:
+  cra-runtime-environment-variables:
+    image: erp-frontend
+    ports:
+      - "5000:80"
+    environment:
+      - API_URL=https://audit-log.test.rensource.energy
