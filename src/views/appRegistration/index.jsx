@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { _getAllApplications } from "../../actions/mainAction";
+import {
+  _getAllApplications,
+  _addNewApp,
+  _editApp,
+  _deleteApp,
+  _updateToast
+} from "../../actions/mainAction";
 import Sidebar from "../../layout/sidebar";
 import CreateApp from "./createApp";
 import Toast from "../../utility/toast";
@@ -18,19 +24,16 @@ class Index extends Component {
   };
 
   handleClose = () => {
-    this.setState({ showModal: false, data: {}, edit: false  });
+    this.setState({ showModal: false, data: {}, edit: false });
   };
 
   handleShow = () => {
     this.setState({ showModal: true });
   };
 
-  selectItem = (data) => {
-    this.setState({data, edit: true,  showModal: true})
-  }
-  delete = (id)=> {
-
-  }
+  selectItem = data => {
+    this.setState({ data, edit: true, showModal: true });
+  };
   onChange = e => {
     let data = this.state.data;
     data[[e.target.name]] = e.target.value;
@@ -40,33 +43,41 @@ class Index extends Component {
   };
 
   handleAdd = () => {
-    this.props.addLocation(this.state.data);
+    this.props.addNewApp(this.state.data);
   };
   handleUpdate = () => {
-    this.props.addLocation(this.state.data);
+    this.props.editApp(this.state.data);
   };
 
-  showToast = data => {
+  delete = id => {
+    let result = window.confirm("Want to delete?");
+    if (result) {
+      this.props.deleteApp(id);
+    }
+  };
+
+  _callToast = () => {
+    let toast = {
+      visible: false,
+      level: "success",
+      message: null
+    };
+    this.setState({
+      toast: { ...this.state.toast, visible: false, message: null }
+    });
+    this.props.updateToast(toast);
+  };
+
+  showToast = () => {
     this.setState(
       {
-        toast: {
-          ...this.state.toast,
-          visible: data.success ? true : false,
-          message: data.message,
-          level: data.success === true ? "success" : "danger"
-        }
+        toast: this.props.toast
       },
       () => {
-        setTimeout(
-          () =>
-            this.setState({ toast: { ...this.state.toast, visible: false } }),
-          4000
-        );
+        setTimeout(() => this._callToast(), 4000);
       }
     );
   };
-
-
 
   tableData = prop => {
     let id = 1;
@@ -78,7 +89,20 @@ class Index extends Component {
             <td>{data.adminEmail}</td>
             <td>{data.appName}</td>
             <td>{data.description}</td>
-            <td><span><i className="fas fa-edit " onClick={() => this.selectItem(data)} /></span><span><i className="fas fa-trash " onClick={() => this.delete(data.id)} /></span></td>
+            <td>
+              <span>
+                <i
+                  className="fas fa-edit "
+                  onClick={() => this.selectItem(data)}
+                />
+              </span>
+              <span>
+                <i
+                  className="fas fa-trash "
+                  onClick={() => this.delete(data.appId)}
+                />
+              </span>
+            </td>
           </tr>
         );
       })
@@ -89,19 +113,16 @@ class Index extends Component {
   };
 
   componentDidMount() {
-      this.props.getAllApplications()
+    this.props.getAllApplications();
   }
 
-//   componentWillReceiveProps(nextProps) {
-//     if (nextProps.response.data) {
-//       if (this.props.locationsData.indexOf(nextProps.response.data) === -1)
-//         this.props.locationsData.unshift(nextProps.response.data);
-//     }
-//     if (nextProps.response.success === true) {
-//       this.setState({ showModal: false, data: {} });
-//       setTimeout(() => this.showToast(nextProps.response), 2000);
-//     }
-//   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.toast.visible !== this.props.toast.visible) {
+      this.showToast();
+      this.handleClose();
+      this.props.getAllApplications();
+    }
+  }
 
   render() {
     const appList = this.props.allApplications.length ? (
@@ -120,17 +141,16 @@ class Index extends Component {
     ) : (
       <div>No Application yet!</div>
     );
- console.log(this.props.allApplications, "all app")
     return (
       <div className="side-container">
         <Sidebar />
         <CreateApp
           handleChange={this.onChange}
-          handleAdd={this.handleClick}
-          handleUpdate = {this.handleUpdate}
+          handleAdd={this.handleAdd}
+          handleUpdate={this.handleUpdate}
           data={this.state.data}
           response={""}
-          edit = {this.state.edit}
+          edit={this.state.edit}
           showModal={this.state.showModal}
           handleClose={this.handleClose}
         />
@@ -150,11 +170,19 @@ class Index extends Component {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col" style={{width:'5%'}}>ID</th>
-                <th scope="col" style={{width:'15%'}}>Admin Email</th>
+                <th scope="col" style={{ width: "5%" }}>
+                  ID
+                </th>
+                <th scope="col" style={{ width: "15%" }}>
+                  Admin Email
+                </th>
                 <th scope="col">Application Name</th>
-                <th scope="col"  style={{width:'65%'}}>Description</th>
-                <th scope="col" style={{width:'8%'}}>Actions</th>
+                <th scope="col" style={{ width: "65%" }}>
+                  Description
+                </th>
+                <th scope="col" style={{ width: "8%" }}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>{this.tableData(this.props.allApplications)}</tbody>
@@ -171,14 +199,27 @@ class Index extends Component {
   }
 }
 const mapStateToProps = state => ({
-    allApplications: state._main.allApplications
+  allApplications: state._main.allApplications,
+  toast: state._main.toast
 });
 
 const mapDispatchToProps = dispatch => {
   return {
     getAllApplications: () => {
-        dispatch(_getAllApplications());
-      }
+      dispatch(_getAllApplications());
+    },
+    updateToast: params => {
+      dispatch(_updateToast(params));
+    },
+    addNewApp: params => {
+      dispatch(_addNewApp(params));
+    },
+    editApp: params => {
+      dispatch(_editApp(params));
+    },
+    deleteApp: params => {
+      dispatch(_deleteApp(params));
+    }
   };
 };
 

@@ -1,8 +1,11 @@
-export const LOGIN = 'LOGIN';
-export const IS_LOGIN = 'IS_LOGIN';
 export const GET_ALL_APPLICATIONS = "GET_ALL_APPLICATIONS";
 export const ADD_NEW_APPLICATION = "ADD_NEW_APPLICATION";
 export const ALL_AUDIT_LOGS = "ALL_AUDIT_LOGS";
 export const GET_ALL_ACTION_TYPES = "GET_ALL_ACTION_TYPES";
-
-
+export const Add_NEW_APP = 'Add_NEW_APP';
+export const EDIT_APP = 'EDIT_APP';
+export const DELETE_APP = 'DELETE_APP';
+export const Add_ACTION_TYPE = 'Add_ACTION_TYPE';
+export const EDIT_ACTION_TYPE= 'EDIT_ACTION_TYPE';
+export const DELETE_ACTION_TYPE = 'DELETE_ACTION_TYPE';
+export const UPDATE_TOAST = 'UPDATE_TOAST';

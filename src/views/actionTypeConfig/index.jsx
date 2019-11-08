@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import { _getAllActionTypes } from "../../actions/mainAction";
+import {
+  _getAllActionTypes,
+  _updateToast,
+  _addActionType,
+  _editActionType,
+  _deleteActionType
+} from "../../actions/mainAction";
 import Sidebar from "../../layout/sidebar";
 import Toast from "../../utility/toast";
 import CreateNew from "./createNew";
@@ -18,7 +24,7 @@ class Index extends Component {
   };
 
   handleClose = () => {
-    this.setState({ showModal: false, data: {}, edit: false  });
+    this.setState({ showModal: false, data: {}, edit: false });
   };
 
   handleShow = () => {
@@ -32,38 +38,44 @@ class Index extends Component {
     });
   };
 
-  selectItem = (data) => {
-    this.setState({data, edit: true,  showModal: true})
-  }
+  selectItem = data => {
+    this.setState({ data, edit: true, showModal: true });
+  };
 
   handleAdd = () => {
-    this.props.addLocation(this.state.data);
+    this.props.addActionType(this.state.data);
   };
 
   handleUpdate = () => {
-    this.props.addLocation(this.state.data);
+    this.props.editActionType(this.state.data);
   };
 
-  delete = (id)=> {
+  delete = id => {
+    let result = window.confirm("Want to delete?");
+    if (result) {
+      this.props.deleteActionType(id);
+    }
+  };
 
-  }
+  _callToast = () => {
+    let toast = {
+      visible: false,
+      level: "success",
+      message: null
+    };
+    this.setState({
+      toast: { ...this.state.toast, visible: false, message: null }
+    });
+    this.props.updateToast(toast);
+  };
 
-  showToast = data => {
+  showToast = () => {
     this.setState(
       {
-        toast: {
-          ...this.state.toast,
-          visible: data.success ? true : false,
-          message: data.message,
-          level: data.success === true ? "success" : "danger"
-        }
+        toast: this.props.toast
       },
       () => {
-        setTimeout(
-          () =>
-            this.setState({ toast: { ...this.state.toast, visible: false } }),
-          4000
-        );
+        setTimeout(() => this._callToast(), 4000);
       }
     );
   };
@@ -77,8 +89,20 @@ class Index extends Component {
             <td>{data.id}</td>
             <td>{data.name}</td>
             <td>{data.description}</td>
-            <td><span><i className="fas fa-edit " onClick={() => this.selectItem(data)} /></span><span><i className="fas fa-trash " onClick={() => this.delete(data.id)} /></span></td>
-
+            <td>
+              <span>
+                <i
+                  className="fas fa-edit "
+                  onClick={() => this.selectItem(data)}
+                />
+              </span>
+              <span>
+                <i
+                  className="fas fa-trash "
+                  onClick={() => this.delete(data.id)}
+                />
+              </span>
+            </td>
           </tr>
         );
       })
@@ -86,33 +110,28 @@ class Index extends Component {
       <div>No Inventory yet!</div>
     );
     return renData;
-  }
+  };
 
   componentDidMount() {
-    this.props.getAllActionTypes()
+    this.props.getAllActionTypes();
   }
 
-//   componentWillReceiveProps(nextProps) {
-//     if (nextProps.response.data) {
-//       if (this.props.locationsData.indexOf(nextProps.response.data) === -1)
-//         this.props.locationsData.unshift(nextProps.response.data);
-//     }
-//     if (nextProps.response.success === true) {
-//       this.setState({ showModal: false, data: {} });
-//       setTimeout(() => this.showToast(nextProps.response), 2000);
-//     }
-//   }
+  componentDidUpdate(prevProps) {
+    if (prevProps.toast.visible !== this.props.toast.visible) {
+      this.showToast();
+      this.handleClose();
+      this.props.getAllActionTypes();
+    }
+  }
 
   render() {
-
-    console.log(this.props.allActionTypes, "data")
     return (
       <div className="side-container">
         <Sidebar />
         <CreateNew
           handleChange={this.onChange}
           handleAdd={this.handleAdd}
-          handleUpdate = {this.handleUpdate}
+          handleUpdate={this.handleUpdate}
           data={this.state.data}
           response={""}
           showModal={this.state.showModal}
@@ -120,14 +139,14 @@ class Index extends Component {
           handleClose={this.handleClose}
         />
         <div className="breadcrumb">
-        AuditTrail action type
+          AuditTrail action type
           <button
             type="button"
             className="btn btn-add float-right fs13 "
             onClick={this.handleShow}
           >
             <i className="fas fa-plus p5" />
-            Add 
+            Add
           </button>
         </div>
 
@@ -135,11 +154,16 @@ class Index extends Component {
           <table className="table table-striped">
             <thead>
               <tr>
-                <th scope="col"  style={{width:'5%'}} >ID</th>
+                <th scope="col" style={{ width: "5%" }}>
+                  ID
+                </th>
                 <th scope="col">Name</th>
-                <th scope="col" style={{width:'70%'}}>Description</th>
-                <th scope="col" style={{width:'7%'}}>Actions</th>
-
+                <th scope="col" style={{ width: "70%" }}>
+                  Description
+                </th>
+                <th scope="col" style={{ width: "7%" }}>
+                  Actions
+                </th>
               </tr>
             </thead>
             <tbody>{this.tableData(this.props.allActionTypes)}</tbody>
@@ -156,14 +180,26 @@ class Index extends Component {
   }
 }
 const mapStateToProps = state => ({
-  allActionTypes: state._main.allActionTypes
-
+  allActionTypes: state._main.allActionTypes,
+  toast: state._main.toast
 });
 
 const mapDispatchToProps = dispatch => {
   return {
-    getAllActionTypes: (params) => {
+    getAllActionTypes: params => {
       dispatch(_getAllActionTypes(params));
+    },
+    updateToast: params => {
+      dispatch(_updateToast(params));
+    },
+    addActionType: params => {
+      dispatch(_addActionType(params));
+    },
+    editActionType: params => {
+      dispatch(_editActionType(params));
+    },
+    deleteActionType: params => {
+      dispatch(_deleteActionType(params));
     }
   };
 };
