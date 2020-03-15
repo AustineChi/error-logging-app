@@ -1,5 +1,4 @@
 $background-color-dark: #101110;
-$background-color-lightBlue:#306483;
 $color-gray-dark: #777;
 $color-white: #fff;
 $color-yellow: #FCC04E;
@@ -7,7 +6,7 @@ $color-gray-light: #F5F5FA;
 $color-gray-light-2: rgb(232, 240, 254);
 $color-red: #F26E6E;
 $color-green: #5cb85c;
-$color-blue: #073553;
+$color-blue: $background-color-dark;
 $height-footer: 60px;
 * {
   margin: 0;
@@ -340,14 +339,14 @@ transition: all 1s;
   height: 100vh;
   // margin-left: -270px;
   top: 0;  
-  background: #073553;
+  background: $background-color-dark;
   color: #fff;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
   .logo-area {
-    padding: 0.25rem 10px;
+    padding: 1.25rem;
     font-weight: 700;
     font-size: 21px
 
@@ -356,7 +355,7 @@ transition: all 1s;
 }
 
 .breadcrumb {
-  background-color: #073553;
+  background-color: $background-color-dark;
   color: #C4C4C4;
   font-weight: 700;
   position: relative;
@@ -595,7 +594,7 @@ label {
   margin:20px auto;
   position: relative;
   .btn-rensource-blue {
-    background-color: #073553;;
+    background-color: $background-color-dark;;
     color: #fff;
     position: absolute;
     top: 7px;

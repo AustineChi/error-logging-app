@@ -81,7 +81,6 @@ class Index extends Component {
   };
 
   tableData = prop => {
-    let id = 1;
     const renData = prop.length ? (
       prop.map(data => {
         return (

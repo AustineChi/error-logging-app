@@ -25,12 +25,12 @@ class Index extends Component {
 
   pageChange = (e) => {
     let params = this.state.params;
-    if(e.target.name == 'prev' && params.page >1){
+    if(e.target.name === 'prev' && params.page >1){
       params.page =  parseInt(params.page)- 1;
       this.setState({params})
     this.props.getAllAuditLogs(params)
     }
-    else if(e.target.name == 'next'){
+    else if(e.target.name === 'next'){
       params.page =  parseInt(params.page) + 1;
             this.setState({ params})
     this.props.getAllAuditLogs(params)
@@ -38,7 +38,6 @@ class Index extends Component {
   }
 
   tableData = prop => {
-    let id = 1;
     const renData = prop.length ? (
       prop.map(data => {
         return (
@@ -111,7 +110,6 @@ class Index extends Component {
 
 
   render() {
-    console.log(this.state.params, "page")
     return (
       <div className="side-container">
         <Sidebar />
@@ -165,7 +163,7 @@ class Index extends Component {
 
 
         <div className="docs-prevnext" >
-          {(this.state.params.page==1)? " " :<button className="docs-prev btn" name="prev" onClick={this.pageChange}>prev</button>}
+          {(this.state.params.page===1)? " " :<button className="docs-prev btn" name="prev" onClick={this.pageChange}>prev</button>}
           {(this.props.allAuditLogs.length > 9)? <button className="docs-next btn" name="next" onClick={this.pageChange}>next</button>: ""}
 </div>
 

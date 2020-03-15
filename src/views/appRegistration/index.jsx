@@ -80,7 +80,6 @@ class Index extends Component {
   };
 
   tableData = prop => {
-    let id = 1;
     const renData = prop.length ? (
       prop.map(data => {
         return (
@@ -107,7 +106,7 @@ class Index extends Component {
         );
       })
     ) : (
-      <div>No Inventory yet!</div>
+      <tr> <td> No Inventory yet!</td></tr>
     );
     return renData;
   };
@@ -125,22 +124,6 @@ class Index extends Component {
   }
 
   render() {
-    const appList = this.props.allApplications.length ? (
-      this.props.allApplications.map(data => {
-        return (
-          <div className="card" key={data.name}>
-            <div className="card-header">
-              {data.name} <i className="fas fa-ellipsis-v fr" />
-            </div>
-            <div className="card-body">
-              <i className="fas fa-map-marker-alt p5" /> {data.address}
-            </div>
-          </div>
-        );
-      })
-    ) : (
-      <div>No Application yet!</div>
-    );
     return (
       <div className="side-container">
         <Sidebar />

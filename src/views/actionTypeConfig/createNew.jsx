@@ -14,7 +14,7 @@ const CreateNew = ({
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>{(edit == true)? "Update": "Create"}  AuditTrail action type</Modal.Title>
+        <Modal.Title>{(edit === true)? "Update": "Create"}  AuditTrail action type</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <span style={{ color: "red", fontSize: "13px" }}>
@@ -46,9 +46,9 @@ const CreateNew = ({
         <button
           type="button"
           className="btn btn-dark fullwidth"
-          onClick={(edit == true)? handleUpdate:handleAdd}
+          onClick={(edit === true)? handleUpdate:handleAdd}
         >
-         { (edit == true)?"Update": "Add" } 
+         { (edit === true)?"Update": "Add" } 
         </button>
       </Modal.Footer>
     </Modal>

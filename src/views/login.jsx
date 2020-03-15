@@ -28,13 +28,14 @@ class Login extends Component {
     this.props.getLogin(this.state.data)
   };
 
-  componentWillReceiveProps(nextProps) {
+
+  componentDidUpdate(prevProps) {
+
     this.setState({loading: ""})
-    console.log(nextProps, "props") 
-    if (nextProps.loginStatus.success == false) {
+    if (prevProps.loginStatus !== this.props.loginStatus && this.props.loginStatus.success == false) {
       this.setState({ loginMessage: "Incorrect Username or Password" });
     }
-    if (nextProps.loginStatus.token) {
+    if (this.props.loginStatus.token) {
       this.props.isLogin(true)
       sessionStorage.setItem('login', nextProps)
     }

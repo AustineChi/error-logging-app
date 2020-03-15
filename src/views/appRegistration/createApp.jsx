@@ -14,7 +14,7 @@ const CreateApp = ({
   return (
     <Modal show={showModal} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>{(edit == true)? "Update": "Register"} App</Modal.Title>
+        <Modal.Title>{(edit === true)? "Update": "Register"} App</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <span style={{ color: "red", fontSize: "13px" }}>
@@ -57,9 +57,9 @@ const CreateApp = ({
         <button
           type="button"
           className="btn btn-dark fullwidth"
-          onClick={(edit == true)? handleUpdate:handleAdd}
+          onClick={(edit === true)? handleUpdate:handleAdd}
         >
-           { (edit == true)?"Update": "Create" } 
+           { (edit === true)?"Update": "Create" } 
         </button>
       </Modal.Footer>
     </Modal>

@@ -11,6 +11,7 @@ import {
   DELETE_ACTION_TYPE,
   UPDATE_TOAST
 } from "./types";
+
 import { LOG_API } from "./apiMiddleware";
 
 export const _addNewApp = data => dispatch => {
@@ -226,4 +227,5 @@ export const _updateToast = (data) => dispatch =>  {
       payload: data
     })
 }
+
 
