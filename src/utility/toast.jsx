@@ -4,8 +4,6 @@ class Toast extends Component {
 
   state = { 
     visible: '',
-
-
    }
 
   getIcon() {

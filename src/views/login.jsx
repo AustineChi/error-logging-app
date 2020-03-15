@@ -35,7 +35,7 @@ class Login extends Component {
     if (prevProps.loginStatus !== this.props.loginStatus && this.props.loginStatus.success == false) {
       this.setState({ loginMessage: "Incorrect Username or Password" });
     }
-    if (this.props.loginStatus.token) {
+    if (prevProps.loginStatus.token !== this.props.loginStatus.token) {
       this.props.isLogin(true)
       sessionStorage.setItem('login', nextProps)
     }
