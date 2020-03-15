@@ -1,5 +1,5 @@
 {
-  "name": "rensource-error-logging-app",
+  "name": "error-logging-app",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
